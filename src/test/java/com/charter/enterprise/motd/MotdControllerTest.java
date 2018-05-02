@@ -17,6 +17,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureMockMvc
 public class MotdControllerTest {
+
     @Autowired
     private MockMvc mvc;
 
@@ -24,6 +25,9 @@ public class MotdControllerTest {
     public void getMotd() throws Exception {
         mvc.perform(MockMvcRequestBuilders.get("/"))
                 .andExpect(status().isOk())
-                .andExpect(content().string(equalTo("Goodbye world!")));
+                .andExpect(content().string(equalTo(MotdController.DEFAULT_MESSAGE)));
     }
+
+
+
 }
