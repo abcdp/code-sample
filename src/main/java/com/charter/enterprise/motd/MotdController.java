@@ -1,9 +1,6 @@
 package com.charter.enterprise.motd;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RequestMapping("/")
 @RestController
@@ -19,7 +16,7 @@ public class MotdController {
     }
 
     @PostMapping
-    public void setMotd(String message) {
+    public void setMotd(@RequestParam String message) {
         currentMessage = message;
     }
 
