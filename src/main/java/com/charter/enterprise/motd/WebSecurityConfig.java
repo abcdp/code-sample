@@ -15,7 +15,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         httpSecurity
                 .csrf().disable()
                 .requiresChannel()
-                .antMatchers(HttpMethod.POST,"/")
+                .antMatchers(HttpMethod.PUT,"/")
                 .requiresSecure();
 
     }

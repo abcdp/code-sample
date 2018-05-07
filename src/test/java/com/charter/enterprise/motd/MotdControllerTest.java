@@ -6,6 +6,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -36,15 +37,24 @@ public class MotdControllerTest {
         MessageResource resource = new MessageResource(newMessage, MotdController.SECURITY_KEY);
         ObjectMapper mapper = new ObjectMapper();
         String resourceJson = mapper.writeValueAsString(resource);
-        mvc.perform(MockMvcRequestBuilders.post("/")
-                .content(resourceJson));
-//                .andExpect(content().string("Message changed successfully."));
-        mvc.perform(MockMvcRequestBuilders.get("/"))
-                .andExpect(status().isOk()).andExpect(content().string(newMessage));
+        mvc.perform(MockMvcRequestBuilders
+                .put("/")
+                .secure(true)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(resourceJson))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Message changed successfully."));
 
+        mvc.perform(MockMvcRequestBuilders.get("/"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(newMessage));
 
     }
 
+    @Test
+    public void deleteTest() throws Exception {
+        mvc.perform(MockMvcRequestBuilders.delete("/")).andExpect(content().string("Hello from delete."));
+    }
 
 
 }
