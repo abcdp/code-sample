@@ -42,10 +42,4 @@ public class MotdController {
         return response;
     }
 
-    @RequestMapping(method = RequestMethod.DELETE)
-    public HttpEntity deleteMethod() {
-        HttpEntity response = ResponseEntity.status(HttpStatus.OK).body("Hello from delete.");
-        return response;
-    }
-
 }

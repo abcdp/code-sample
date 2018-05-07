@@ -51,10 +51,4 @@ public class MotdControllerTest {
 
     }
 
-    @Test
-    public void deleteTest() throws Exception {
-        mvc.perform(MockMvcRequestBuilders.delete("/")).andExpect(content().string("Hello from delete."));
-    }
-
-
 }
