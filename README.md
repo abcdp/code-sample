@@ -1,33 +1,41 @@
 # Charter Enterprise MOTD Sample Project
-A small project to help assess candidate experience with webservices and our technology stack.
+A web service that returns a message of the day, which can also be set via a secure PUT request.
 
 ## Instructions
-We have provided a webservice that provides a "message of the day", similar to what you might see logging into a Unix system. Unfortuantely, at Charter things don't always go as planned and we need to change the message.  We need you to add the abilty to change the message.   The message can be stored in the service using any mechanism you like, but aim for simplicity.  Something very simple, and in memory can be used.   It does not have to be durable between restarts, so please avoid writing to a file.  A persistent store like MySQL or Hypersonic could be overkill for this new requirement.  Iterative requests for the MOTD should return the new message, if it has been changed. Be sure to edit this README.md so we understand what you've done.
+The put command can must be done using https and port 8443 and requires a Content-Type : application/json header. The following JSON format should be used in the body of the http request:
 
-Also, a rogue developer has left the code base broken.  To get anything done, you're doing to have to fix the tests first! And, no, -DskipTests is not a solution!
+{"message":"This is the new message.",
+"securityKey":"ofihuUD$5hfQRcLX&34"}
 
-Push your answer to this Github repo as a feature branch and create a pull request so we know you're done.
+The securityKey is just a static variable stored in the controller. I used RESTClient for testing. Note that a security exception must be added for the https endpoint because the certificate is locally-generated and has not been registered.
 
 ### Getting Started
 * To compile
-```mvn clean package```
+mvn clean install dockerfile:build
 
 * To run
-```mvn spring-boot:run```
+If using Docker:
+docker run -p 8080:8080 -p 8443:8443 -t springio/motd-code-sample
+else:
+From the target directory
+java -jar motd-code-sample-1.0-SNAPSHOT.jar
 
 * To see the message:
-```curl localhost:8080```
+I used a browser:
+locally: localhost:8080
+AWS: http://ec2-52-14-195-214.us-east-2.compute.amazonaws.com:8080
+
+* To change the message:
+locally: https://localhost:8443/
+AWS: https://ec2-52-14-195-214.us-east-2.compute.amazonaws.com:8443
+
+See the instructions above for generating the PUT command.
+
 
 ### Prerequisites
 * Java 1.8
 * Maven
-* cURL
-  
-### Deployment
-If you whiz through this sample, try adding a deployment.   We are a Docker and AWS shop.  Getting something into an AWS or Heroku, or whatever you're comfortable with will be an "A+"
+* RESTClient in Firefox was what I used for testing the PUT command
 
-### Project hints and questions
-* Stuck getting started?
-  * The official Spring Boot "hello world" example is a great starting point.
-* Still need help?
-  * Further hints are available, Feel free to ask questions here.  Edit this file in your branch by adding to the questions section, push it, and we will update the file with answers. 
+### Deployment
+This is now running in AWS at http://ec2-52-14-195-214.us-east-2.compute.amazonaws.com. There is currently done manually - there is no build integration for AWS deployment.
